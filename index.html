@@ -3,33 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Soundboard Mèmes</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>Soundboard 🎵</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #f5f5f5;
+      --bg: #f4f4f4;
       --surface: #ffffff;
-      --border: rgba(0,0,0,0.1);
-      --border-hover: rgba(0,0,0,0.2);
-      --text: #111111;
-      --text-muted: #666666;
-      --text-hint: #999999;
-      --radius-md: 8px;
-      --radius-lg: 12px;
+      --border: rgba(0,0,0,0.08);
+      --border-strong: rgba(0,0,0,0.18);
+      --text: #111;
+      --muted: #666;
+      --hint: #aaa;
+      --radius: 12px;
+      --radius-sm: 8px;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #1a1a1a;
+        --bg: #181818;
         --surface: #242424;
-        --border: rgba(255,255,255,0.1);
-        --border-hover: rgba(255,255,255,0.2);
+        --border: rgba(255,255,255,0.08);
+        --border-strong: rgba(255,255,255,0.18);
         --text: #f0f0f0;
-        --text-muted: #999999;
-        --text-hint: #666666;
+        --muted: #888;
+        --hint: #555;
       }
     }
 
@@ -37,46 +36,51 @@
       font-family: 'Nunito', sans-serif;
       background: var(--bg);
       color: var(--text);
-      padding: 24px 20px 100px;
       min-height: 100vh;
+      padding: 28px 20px 100px;
     }
 
-    header {
-      max-width: 900px;
-      margin: 0 auto 20px;
+    .header {
+      max-width: 960px;
+      margin: 0 auto 22px;
     }
 
-    header h1 {
-      font-size: 28px;
+    .header h1 {
+      font-size: 30px;
       font-weight: 900;
-      color: var(--text);
       margin-bottom: 4px;
     }
 
-    header p {
+    .header p {
       font-size: 13px;
-      color: var(--text-muted);
+      color: var(--muted);
       margin-bottom: 16px;
     }
 
-    .search {
-      width: 100%;
-      max-width: 400px;
-      padding: 10px 14px;
-      font-size: 14px;
-      font-family: inherit;
-      border: 0.5px solid var(--border-hover);
-      border-radius: var(--radius-md);
-      background: var(--surface);
-      color: var(--text);
-      margin-bottom: 14px;
-      outline: none;
-      display: block;
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
     }
 
-    .search:focus {
-      border-color: var(--text-muted);
+    .search {
+      flex: 1;
+      min-width: 180px;
+      max-width: 320px;
+      padding: 9px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 700;
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
     }
+
+    .search:focus { border-color: var(--muted); }
+    .search::placeholder { color: var(--hint); font-weight: 700; }
 
     .cats {
       display: flex;
@@ -84,134 +88,147 @@
       flex-wrap: wrap;
     }
 
-    .cat-btn {
-      padding: 5px 14px;
-      border: 0.5px solid var(--border-hover);
-      border-radius: 20px;
+    .cat {
+      padding: 6px 14px;
+      border: 1.5px solid var(--border-strong);
+      border-radius: 99px;
       background: var(--surface);
-      color: var(--text-muted);
+      color: var(--muted);
       font-size: 12px;
       font-weight: 800;
       font-family: inherit;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.12s;
     }
 
-    .cat-btn:hover {
-      background: var(--bg);
-      color: var(--text);
-    }
+    .cat:hover { color: var(--text); border-color: var(--muted); }
 
-    .cat-btn.active {
+    .cat.active {
       background: var(--text);
       color: var(--surface);
       border-color: var(--text);
     }
 
+    /* ── GRID ── */
     .grid {
-      max-width: 900px;
+      max-width: 960px;
       margin: 20px auto 0;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
       gap: 10px;
     }
 
-    .snd {
+    /* ── SOUND CARD ── */
+    .card {
       background: var(--surface);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
       padding: 18px 12px 14px;
       cursor: pointer;
       text-align: center;
-      transition: all 0.15s;
+      transition: transform 0.12s, border-color 0.12s, box-shadow 0.12s;
       position: relative;
       overflow: hidden;
       user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .snd:hover {
-      border-color: var(--border-hover);
+    .card:hover {
+      border-color: var(--border-strong);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
     }
 
-    .snd:active {
-      transform: scale(0.97);
-    }
+    .card:active { transform: scale(0.96); }
 
-    .snd.playing {
-      border-color: var(--border-hover);
-    }
+    .card.playing { border-color: var(--border-strong); }
 
-    .snd .icon {
-      font-size: 30px;
+    .card .emoji {
+      font-size: 32px;
       display: block;
       margin-bottom: 10px;
       line-height: 1;
+      pointer-events: none;
     }
 
-    .snd .label {
+    .card .name {
       font-size: 11px;
-      font-weight: 800;
+      font-weight: 900;
       color: var(--text);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
       line-height: 1.3;
+      pointer-events: none;
     }
 
-    .snd .tag {
+    .card .badge {
       display: inline-block;
       margin-top: 8px;
       font-size: 10px;
       font-weight: 800;
       padding: 2px 8px;
-      border-radius: 20px;
-    }
-
-    /* Progress bar at bottom of card */
-    .snd .bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--text-muted);
-      transform: scaleX(0);
-      transform-origin: left;
-      opacity: 0;
-    }
-
-    .snd.playing .bar {
-      animation: progress var(--dur, 1s) linear forwards;
-    }
-
-    @keyframes progress {
-      0%   { transform: scaleX(0); opacity: 0.6; }
-      100% { transform: scaleX(1); opacity: 0.2; }
-    }
-
-    /* Ripple */
-    .snd .ripple {
-      position: absolute;
-      border-radius: 50%;
-      transform: scale(0);
-      animation: ripple-anim 0.5s linear;
-      background: rgba(128,128,128,0.15);
+      border-radius: 99px;
       pointer-events: none;
     }
 
-    @keyframes ripple-anim {
-      to { transform: scale(4); opacity: 0; }
+    /* Progress bar */
+    .card .prog {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--text);
+      transform: scaleX(0);
+      transform-origin: left;
+      opacity: 0;
+      border-radius: 0 0 0 0;
     }
 
-    /* Now playing bar */
-    .nowbar {
+    .card.playing .prog {
+      animation: prog var(--dur, 1s) linear forwards;
+    }
+
+    @keyframes prog {
+      0%   { transform: scaleX(0); opacity: 0.4; }
+      100% { transform: scaleX(1); opacity: 0.15; }
+    }
+
+    /* Ripple */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(128,128,128,0.12);
+      transform: scale(0);
+      animation: ripple 0.5s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+
+    /* Error state */
+    .card.error { opacity: 0.45; cursor: not-allowed; }
+    .card.error::after {
+      content: '⚠️';
+      position: absolute;
+      top: 6px; right: 8px;
+      font-size: 11px;
+    }
+
+    /* Empty */
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--hint);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* ── NOW PLAYING BAR ── */
+    .bar {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       background: var(--surface);
-      border-top: 0.5px solid var(--border-hover);
+      border-top: 1.5px solid var(--border-strong);
       padding: 12px 24px;
       display: flex;
       align-items: center;
@@ -221,552 +238,254 @@
       z-index: 99;
     }
 
-    .nowbar.show {
-      transform: translateY(0);
-    }
+    .bar.show { transform: translateY(0); }
 
-    .nowbar .now-icon {
-      font-size: 18px;
-    }
+    .bar .icon { font-size: 20px; }
 
-    .nowbar .name {
+    .bar .label {
+      flex: 1;
       font-size: 13px;
       font-weight: 800;
       color: var(--text);
-      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .nowbar .stop {
+    .bar .vol {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .bar .stop {
       padding: 6px 14px;
-      border: 0.5px solid var(--border-hover);
-      border-radius: var(--radius-md);
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius-sm);
       background: transparent;
-      color: var(--text-muted);
+      color: var(--muted);
       font-size: 12px;
       font-weight: 800;
       font-family: inherit;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.12s;
+      white-space: nowrap;
     }
 
-    .nowbar .stop:hover {
+    .bar .stop:hover {
       background: var(--bg);
       color: var(--text);
     }
 
-    .empty {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-hint);
-      font-size: 14px;
-      grid-column: 1 / -1;
+    /* ── SETUP NOTICE ── */
+    .notice {
+      max-width: 960px;
+      margin: 0 auto 16px;
+      background: #fffbeb;
+      border: 1.5px solid #fcd34d;
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #92400e;
+      display: none;
     }
+
+    .notice.show { display: block; }
+    .notice a { color: #b45309; }
   </style>
 </head>
 <body>
 
-  <header>
+  <div class="header">
     <h1>Soundboard 🎵</h1>
-    <p>Clique sur un son — volume poussé à fond</p>
-    <input class="search" id="q" placeholder="Rechercher un son..." oninput="render()">
-    <div class="cats" id="cats"></div>
-  </header>
+    <p>Volume poussé à fond automatiquement</p>
+    <div class="controls">
+      <input class="search" id="q" placeholder="Rechercher..." oninput="render()">
+      <div class="cats" id="cats"></div>
+    </div>
+  </div>
+
+  <div class="notice" id="notice">
+    ⚠️ Certains sons sont manquants. Place tes fichiers MP3 dans le dossier <code>sounds/</code>.
+    Voir le <a href="README.md" target="_blank">README</a> pour savoir où les télécharger.
+  </div>
 
   <div class="grid" id="grid"></div>
 
-  <div class="nowbar" id="bar">
-    <span class="now-icon" id="bar-icon">▶</span>
-    <span class="name" id="bar-name">—</span>
+  <div class="bar" id="bar">
+    <span class="icon" id="bar-icon">▶</span>
+    <span class="label" id="bar-name">—</span>
+    <span class="vol">🔊 MAX</span>
     <button class="stop" onclick="stopAll()">■ Stop</button>
   </div>
 
   <script>
-    /* ─────────────────────────────────────────────
-       SOUND DEFINITIONS
-       ───────────────────────────────────────────── */
-
-    const sounds = [
-
-      /* ── VINE ── */
-      {
-        n: 'Vine Boom', e: '💥', c: 'vine', dur: 1.2,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          const o = C.createOscillator(), d = C.createWaveShaper(), g = C.createGain();
-          const cv = new Float32Array(512);
-          for (let i = 0; i < 512; i++) { const x = i / 256 - 1; cv[i] = x < 0 ? -1 : 1; }
-          d.curve = cv;
-          o.connect(d); d.connect(g); g.connect(C.destination);
-          o.frequency.setValueAtTime(120, t);
-          o.frequency.exponentialRampToValueAtTime(20, t + 1.2);
-          g.gain.setValueAtTime(1, t);
-          g.gain.exponentialRampToValueAtTime(0.001, t + 1.2);
-          o.start(t); o.stop(t + 1.3);
-        }
-      },
-      {
-        n: 'Bruh', e: '😐', c: 'vine', dur: 0.8,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          const o = C.createOscillator(), lp = C.createBiquadFilter(), g = C.createGain();
-          const v = C.createOscillator(), vg = C.createGain();
-          lp.type = 'lowpass'; lp.frequency.value = 700; lp.Q.value = 4;
-          o.type = 'sawtooth';
-          v.frequency.value = 5; vg.gain.value = 5;
-          v.connect(vg); vg.connect(o.frequency);
-          o.connect(lp); lp.connect(g); g.connect(C.destination);
-          o.frequency.setValueAtTime(180, t);
-          o.frequency.linearRampToValueAtTime(130, t + 0.5);
-          g.gain.setValueAtTime(0.8, t);
-          g.gain.linearRampToValueAtTime(0.6, t + 0.4);
-          g.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
-          o.start(t); v.start(t); o.stop(t + 0.8); v.stop(t + 0.8);
-        }
-      },
-      {
-        n: 'Air Horn', e: '📯', c: 'vine', dur: 1.5,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          [[116.5, 0.35], [155.6, 0.3], [185, 0.25], [233.1, 0.2]].forEach(([f, v]) => {
-            const o = C.createOscillator(), d = C.createWaveShaper(), g = C.createGain();
-            const cv = new Float32Array(512);
-            for (let i = 0; i < 512; i++) { const x = i / 256 - 1; cv[i] = x < 0 ? -1 : 1; }
-            d.curve = cv;
-            o.type = 'sawtooth'; o.connect(d); d.connect(g); g.connect(C.destination);
-            o.frequency.value = f;
-            g.gain.setValueAtTime(v, t);
-            g.gain.exponentialRampToValueAtTime(0.001, t + 1.5);
-            o.start(t); o.stop(t + 1.6);
-          });
-        }
-      },
-      {
-        n: "Okay Let's Go", e: '🎮', c: 'vine', dur: 1.2,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          function note(f, start, dur, v = 0.5, type = 'triangle') {
-            const o = C.createOscillator(), g = C.createGain();
-            o.type = type; o.connect(g); g.connect(C.destination);
-            o.frequency.value = f;
-            g.gain.setValueAtTime(v, t + start);
-            g.gain.exponentialRampToValueAtTime(0.001, t + start + dur);
-            o.start(t + start); o.stop(t + start + dur + 0.05);
-          }
-          note(392, 0.00, 0.15, 0.5);
-          note(392, 0.18, 0.12, 0.45);
-          note(440, 0.32, 0.10, 0.5);
-          note(392, 0.45, 0.10, 0.45);
-          note(659, 0.58, 0.25, 0.6);
-          note(587, 0.58, 0.25, 0.4);
-          note(784, 0.58, 0.25, 0.3);
-        }
-      },
-
-      /* ── GAMING ── */
-      {
-        n: 'Roblox Oof', e: '⛏️', c: 'gaming', dur: 0.5,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          const o = C.createOscillator(), lp = C.createBiquadFilter(), g = C.createGain();
-          lp.type = 'bandpass'; lp.frequency.value = 600; lp.Q.value = 3;
-          o.type = 'sawtooth'; o.connect(lp); lp.connect(g); g.connect(C.destination);
-          o.frequency.setValueAtTime(280, t);
-          o.frequency.exponentialRampToValueAtTime(150, t + 0.3);
-          g.gain.setValueAtTime(0.9, t);
-          g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
-          o.start(t); o.stop(t + 0.6);
-        }
-      },
-      {
-        n: 'Metal Pipe', e: '🔧', c: 'gaming', dur: 1.5,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          [1200, 2400, 3600, 4100, 5000, 6200].forEach((f, i) => {
-            const o = C.createOscillator(), g = C.createGain();
-            o.type = 'sine'; o.connect(g); g.connect(C.destination);
-            o.frequency.value = f;
-            const v = i === 0 ? 0.8 : 0.8 / (i + 1);
-            g.gain.setValueAtTime(v, t);
-            g.gain.exponentialRampToValueAtTime(0.001, t + 1.5 / (i * 0.3 + 1));
-            o.start(t); o.stop(t + 1.6);
-          });
-          const buf = C.createBuffer(1, C.sampleRate * 0.02, C.sampleRate);
-          const d = buf.getChannelData(0);
-          for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-          const s = C.createBufferSource(), g = C.createGain();
-          s.buffer = buf; s.connect(g); g.connect(C.destination);
-          g.gain.setValueAtTime(1, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.02);
-          s.start(t);
-        }
-      },
-      {
-        n: 'Level Up', e: '⬆️', c: 'gaming', dur: 0.8,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          [261.6, 329.6, 392, 523.3, 659.3, 784, 1046.5].forEach((f, i) => {
-            const o = C.createOscillator(), g = C.createGain();
-            o.type = 'square'; o.connect(g); g.connect(C.destination);
-            o.frequency.value = f;
-            g.gain.setValueAtTime(0.3, t + i * 0.08);
-            g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.08 + 0.15);
-            o.start(t + i * 0.08); o.stop(t + i * 0.08 + 0.2);
-          });
-        }
-      },
-      {
-        n: 'Game Over', e: '💀', c: 'gaming', dur: 1.2,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          [523.3, 440, 392, 349.2, 293.7, 261.6, 220, 196].forEach((f, i) => {
-            const o = C.createOscillator(), g = C.createGain();
-            o.type = 'square'; o.connect(g); g.connect(C.destination);
-            o.frequency.value = f;
-            g.gain.setValueAtTime(0.35, t + i * 0.1);
-            g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 0.12);
-            o.start(t + i * 0.1); o.stop(t + i * 0.1 + 0.15);
-          });
-        }
-      },
-
-      /* ── TIKTOK ── */
-      {
-        n: 'Womp Womp', e: '🎺', c: 'tiktok', dur: 1.0,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          [[466, 0.0], [370, 0.22], [294, 0.44]].forEach(([f, off]) => {
-            [1, 0.5, 0.25].forEach((v, h) => {
-              const o = C.createOscillator(), g = C.createGain();
-              o.type = 'sawtooth'; o.connect(g); g.connect(C.destination);
-              o.frequency.value = f * (h + 1);
-              g.gain.setValueAtTime(v * 0.4, t + off);
-              g.gain.exponentialRampToValueAtTime(0.001, t + off + 0.2);
-              o.start(t + off); o.stop(t + off + 0.25);
-            });
-          });
-        }
-      },
-      {
-        n: 'Skibidi', e: '🚽', c: 'tiktok', dur: 1.2,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          const mel = [392, 392, 440, 392, 349, 392, 523, 392];
-          const tms = [0, 0.12, 0.24, 0.36, 0.48, 0.60, 0.72, 0.90];
-          mel.forEach((f, i) => {
-            const o = C.createOscillator(), g = C.createGain();
-            o.type = 'triangle'; o.connect(g); g.connect(C.destination);
-            o.frequency.value = f;
-            g.gain.setValueAtTime(0.5, t + tms[i]);
-            g.gain.exponentialRampToValueAtTime(0.001, t + tms[i] + 0.1);
-            o.start(t + tms[i]); o.stop(t + tms[i] + 0.12);
-          });
-          [0, 0.36, 0.72].forEach(off => {
-            const buf = C.createBuffer(1, C.sampleRate * 0.05, C.sampleRate);
-            const d = buf.getChannelData(0);
-            for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);
-            const s = C.createBufferSource(), lp = C.createBiquadFilter(), g = C.createGain();
-            lp.type = 'lowpass'; lp.frequency.value = 180;
-            s.buffer = buf; s.connect(lp); lp.connect(g); g.connect(C.destination);
-            g.gain.setValueAtTime(0.7, t + off);
-            g.gain.exponentialRampToValueAtTime(0.001, t + off + 0.05);
-            s.start(t + off);
-          });
-        }
-      },
-      {
-        n: 'Emotional Damage', e: '😭', c: 'tiktok', dur: 1.0,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          const buf = C.createBuffer(1, C.sampleRate * 0.08, C.sampleRate);
-          const d = buf.getChannelData(0);
-          for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 1);
-          const s = C.createBufferSource(), lp = C.createBiquadFilter(), g = C.createGain();
-          lp.type = 'lowpass'; lp.frequency.value = 200;
-          s.buffer = buf; s.connect(lp); lp.connect(g); g.connect(C.destination);
-          g.gain.setValueAtTime(1, t); s.start(t);
-          [200, 240, 200, 160].forEach((f, i) => {
-            const o = C.createOscillator(), lp2 = C.createBiquadFilter(), g2 = C.createGain();
-            lp2.type = 'bandpass'; lp2.frequency.value = 900; lp2.Q.value = 3;
-            o.type = 'sawtooth'; o.connect(lp2); lp2.connect(g2); g2.connect(C.destination);
-            o.frequency.value = f;
-            g2.gain.setValueAtTime(0.4, t + 0.12 + i * 0.16);
-            g2.gain.exponentialRampToValueAtTime(0.001, t + 0.12 + i * 0.16 + 0.14);
-            o.start(t + 0.12 + i * 0.16); o.stop(t + 0.12 + i * 0.16 + 0.16);
-          });
-        }
-      },
-      {
-        n: 'Deez Nuts', e: '🥜', c: 'tiktok', dur: 0.8,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          const o = C.createOscillator(), lp = C.createBiquadFilter(), g = C.createGain();
-          lp.type = 'bandpass'; lp.frequency.value = 700; lp.Q.value = 2;
-          o.type = 'sawtooth'; o.connect(lp); lp.connect(g); g.connect(C.destination);
-          o.frequency.setValueAtTime(200, t);
-          o.frequency.linearRampToValueAtTime(160, t + 0.2);
-          o.frequency.linearRampToValueAtTime(130, t + 0.5);
-          g.gain.setValueAtTime(0.7, t);
-          g.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
-          o.start(t); o.stop(t + 0.9);
-        }
-      },
-
-      /* ── DISCORD ── */
-      {
-        n: 'Discord Ping', e: '💬', c: 'discord', dur: 0.5,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          [[1174.7, 0, 0.25, 0.5], [1479.9, 0.12, 0.3, 0.4]].forEach(([f, s, d, v]) => {
-            const o = C.createOscillator(), g = C.createGain();
-            o.type = 'sine'; o.connect(g); g.connect(C.destination);
-            o.frequency.value = f;
-            g.gain.setValueAtTime(v, t + s);
-            g.gain.exponentialRampToValueAtTime(0.001, t + s + d);
-            o.start(t + s); o.stop(t + s + d + 0.05);
-          });
-        }
-      },
-      {
-        n: 'MLG Airhorn', e: '🌈', c: 'discord', dur: 1.2,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          [0, 0.06, 0.12].forEach(off => {
-            [[116.5, 0.3], [155.6, 0.25], [185, 0.2], [233.1, 0.15], [293.7, 0.1]].forEach(([f, v]) => {
-              const o = C.createOscillator(), d = C.createWaveShaper(), g = C.createGain();
-              const cv = new Float32Array(512);
-              for (let i = 0; i < 512; i++) { const x = i / 256 - 1; cv[i] = x < 0 ? -1 : 1; }
-              d.curve = cv;
-              o.type = 'sawtooth'; o.connect(d); d.connect(g); g.connect(C.destination);
-              o.frequency.value = f;
-              g.gain.setValueAtTime(v, t + off);
-              g.gain.exponentialRampToValueAtTime(0.001, t + off + 1.0);
-              o.start(t + off); o.stop(t + off + 1.1);
-            });
-          });
-        }
-      },
-      {
-        n: 'Taco Bell', e: '🔔', c: 'discord', dur: 2.5,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          [[523.3, 0.0], [659.3, 0.25], [784, 0.5], [1046.5, 0.75],
-           [784, 1.1], [1046.5, 1.4], [1318.5, 1.7]].forEach(([f, s]) => {
-            const o = C.createOscillator(), g = C.createGain();
-            o.type = 'sine'; o.connect(g); g.connect(C.destination);
-            o.frequency.value = f;
-            g.gain.setValueAtTime(0.5, t + s);
-            g.gain.exponentialRampToValueAtTime(0.001, t + s + 0.6);
-            o.start(t + s); o.stop(t + s + 0.7);
-          });
-        }
-      },
-      {
-        n: 'Fart', e: '💨', c: 'discord', dur: 0.6,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          const buf = C.createBuffer(1, C.sampleRate * 0.6, C.sampleRate);
-          const d = buf.getChannelData(0);
-          for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-          const s = C.createBufferSource(), lp = C.createBiquadFilter();
-          const env = C.createGain(), vib = C.createOscillator(), vg = C.createGain();
-          lp.type = 'lowpass'; lp.frequency.value = 300;
-          vib.frequency.value = 30; vg.gain.value = 50;
-          vib.connect(vg); vg.connect(lp.frequency);
-          s.buffer = buf; s.connect(lp); lp.connect(env); env.connect(C.destination);
-          env.gain.setValueAtTime(0.9, t);
-          env.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
-          s.start(t); vib.start(t); vib.stop(t + 0.6);
-        }
-      },
-
-      /* ── CLASSIQUE ── */
-      {
-        n: 'Windows XP', e: '⛔', c: 'classic', dur: 1.2,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          [[987.8, 0.0, 0.25, 0.6], [880, 0.0, 0.25, 0.4], [1318.5, 0.0, 0.25, 0.3],
-           [1174.7, 0.28, 0.35, 0.7], [1046.5, 0.28, 0.35, 0.5], [1568.0, 0.28, 0.35, 0.25]
-          ].forEach(([f, s, d, v]) => {
-            const o = C.createOscillator(), g = C.createGain();
-            o.type = 'sine'; o.connect(g); g.connect(C.destination);
-            o.frequency.value = f;
-            g.gain.setValueAtTime(v * 0.7, t + s);
-            g.gain.exponentialRampToValueAtTime(0.001, t + s + d);
-            o.start(t + s); o.stop(t + s + d + 0.05);
-          });
-        }
-      },
-      {
-        n: 'Sad Violin', e: '🎻', c: 'classic', dur: 2.0,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          [[196, 0.0, 0.7, 0.4], [220, 0.3, 0.8, 0.5],
-           [246.9, 0.6, 1.0, 0.55], [196, 1.1, 0.9, 0.4]].forEach(([f, s, d, v]) => {
-            const o = C.createOscillator(), vib = C.createOscillator();
-            const vg = C.createGain(), g = C.createGain();
-            o.type = 'sawtooth'; vib.frequency.value = 5.5; vg.gain.value = 4;
-            vib.connect(vg); vg.connect(o.frequency);
-            o.connect(g); g.connect(C.destination);
-            o.frequency.setValueAtTime(f, t + s);
-            g.gain.setValueAtTime(v, t + s);
-            g.gain.exponentialRampToValueAtTime(0.001, t + s + d);
-            o.start(t + s); vib.start(t + s);
-            o.stop(t + s + d + 0.1); vib.stop(t + s + d + 0.1);
-          });
-        }
-      },
-      {
-        n: 'To Be Continued', e: '🌅', c: 'classic', dur: 2.0,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          const mel = [82.4, 82.4, 110, 123.5, 130.8, 110, 82.4];
-          const tim = [0, 0.22, 0.45, 0.60, 0.72, 0.90, 1.05];
-          mel.forEach((f, i) => {
-            [1, 0.5, 0.25].forEach((r, h) => {
-              const o = C.createOscillator(), g = C.createGain();
-              o.type = 'sawtooth'; o.connect(g); g.connect(C.destination);
-              o.frequency.value = f * (h + 1);
-              const dur = i === 6 ? 1.0 : 0.18;
-              g.gain.setValueAtTime(0.35 * r, t + tim[i]);
-              g.gain.exponentialRampToValueAtTime(0.001, t + tim[i] + dur);
-              o.start(t + tim[i]); o.stop(t + tim[i] + dur + 0.1);
-            });
-          });
-        }
-      },
-      {
-        n: 'Dramatic Sting', e: '🎬', c: 'classic', dur: 1.5,
-        fn() {
-          const C = ctx(), t = C.currentTime;
-          [[196, 0, 0.25], [196, 0.3, 0.25], [147, 0.6, 0.9]].forEach(([f, s, d]) => {
-            [1, 2, 3].forEach((h, i) => {
-              const o = C.createOscillator(), g = C.createGain();
-              o.type = 'sawtooth'; o.connect(g); g.connect(C.destination);
-              o.frequency.value = f * h;
-              g.gain.setValueAtTime([0.4, 0.25, 0.15][i], t + s);
-              g.gain.exponentialRampToValueAtTime(0.001, t + s + d);
-              o.start(t + s); o.stop(t + s + d + 0.1);
-            });
-          });
-        }
-      },
+    /* ═══════════════════════════════════════════
+       SONS — chaque son pointe vers sounds/fichier.mp3
+       Pour ajouter un son : ajoute une entrée ici
+       et place le fichier MP3 dans sounds/
+    ═══════════════════════════════════════════ */
+    const SOUNDS = [
+      { name: 'Vine Boom',         emoji: '💥', cat: 'vine',    file: 'vine-boom.mp3'         },
+      { name: 'Bruh',              emoji: '😐', cat: 'vine',    file: 'bruh.mp3'              },
+      { name: 'Air Horn',          emoji: '📯', cat: 'vine',    file: 'airhorn.mp3'           },
+      { name: "Okay Let's Go",     emoji: '🎮', cat: 'vine',    file: 'okay-lets-go.mp3'      },
+      { name: 'Roblox Oof',        emoji: '⛏️', cat: 'gaming',  file: 'oof.mp3'               },
+      { name: 'Metal Pipe',        emoji: '🔧', cat: 'gaming',  file: 'metal-pipe.mp3'        },
+      { name: 'Level Up',          emoji: '⬆️', cat: 'gaming',  file: 'level-up.mp3'          },
+      { name: 'Game Over',         emoji: '💀', cat: 'gaming',  file: 'game-over.mp3'         },
+      { name: 'Womp Womp',         emoji: '🎺', cat: 'tiktok',  file: 'womp-womp.mp3'         },
+      { name: 'Skibidi',           emoji: '🚽', cat: 'tiktok',  file: 'skibidi.mp3'           },
+      { name: 'Emotional Damage',  emoji: '😭', cat: 'tiktok',  file: 'emotional-damage.mp3'  },
+      { name: 'Deez Nuts',         emoji: '🥜', cat: 'tiktok',  file: 'deez-nuts.mp3'         },
+      { name: 'Discord Ping',      emoji: '💬', cat: 'discord', file: 'discord-ping.mp3'      },
+      { name: 'MLG Airhorn',       emoji: '🌈', cat: 'discord', file: 'mlg-airhorn.mp3'       },
+      { name: 'Taco Bell',         emoji: '🔔', cat: 'discord', file: 'taco-bell.mp3'         },
+      { name: 'Fart',              emoji: '💨', cat: 'discord', file: 'fart.mp3'              },
+      { name: 'Windows XP',        emoji: '⛔', cat: 'classic', file: 'windows-xp.mp3'        },
+      { name: 'Sad Violin',        emoji: '🎻', cat: 'classic', file: 'sad-violin.mp3'        },
+      { name: 'To Be Continued',   emoji: '🌅', cat: 'classic', file: 'to-be-continued.mp3'   },
+      { name: 'Dramatic Sting',    emoji: '🎬', cat: 'classic', file: 'dramatic-sting.mp3'    },
     ];
 
-    /* ─────────────────────────────────────────────
-       CATEGORIES
-       ───────────────────────────────────────────── */
-
-    const cats = ['all', 'vine', 'tiktok', 'gaming', 'discord', 'classic'];
-    const catLabels = {
+    const CATS = ['all', 'vine', 'tiktok', 'gaming', 'discord', 'classic'];
+    const CAT_LABELS = {
       all: 'Tout', vine: '🌿 Vine', tiktok: '🎵 TikTok',
       gaming: '🎮 Gaming', discord: '💬 Discord', classic: '👴 Classique'
     };
-    const catColors = {
-      vine: { text: '#15803d', bg: '#dcfce7' },
-      tiktok: { text: '#be185d', bg: '#fce7f3' },
-      gaming: { text: '#4338ca', bg: '#e0e7ff' },
-      discord: { text: '#3730a3', bg: '#eef2ff' },
-      classic: { text: '#b45309', bg: '#fef3c7' },
+    const CAT_STYLE = {
+      vine:    { bg: '#dcfce7', color: '#15803d' },
+      tiktok:  { bg: '#fce7f3', color: '#be185d' },
+      gaming:  { bg: '#e0e7ff', color: '#4338ca' },
+      discord: { bg: '#eef2ff', color: '#3730a3' },
+      classic: { bg: '#fef3c7', color: '#b45309' },
     };
 
-    /* ─────────────────────────────────────────────
-       AUDIO CONTEXT
-       ───────────────────────────────────────────── */
+    /* ── State ── */
+    let activeCat = 'all';
+    let currentAudio = null;
+    let errorCount = 0;
 
-    let AC = null;
+    /* ── Category buttons ── */
+    const catsEl = document.getElementById('cats');
+    CATS.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'cat' + (c === 'all' ? ' active' : '');
+      btn.textContent = CAT_LABELS[c];
+      btn.onclick = () => {
+        activeCat = c;
+        document.querySelectorAll('.cat').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render();
+      };
+      catsEl.appendChild(btn);
+    });
 
-    function ctx() {
-      if (!AC || AC.state === 'closed')
-        AC = new (window.AudioContext || window.webkitAudioContext)();
-      if (AC.state === 'suspended') AC.resume();
-      return AC;
+    /* ── Play a sound ── */
+    function play(sound, card) {
+      // Stop current
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+      document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
+
+      const audio = new Audio('sounds/' + sound.file);
+      audio.volume = 1.0; // MAX VOLUME
+      currentAudio = audio;
+
+      audio.addEventListener('canplaythrough', () => {
+        audio.play().then(() => {
+          card.classList.add('playing');
+          card.style.setProperty('--dur', (audio.duration || 2) + 's');
+          setTimeout(() => card.classList.remove('playing'), (audio.duration || 2) * 1000 + 200);
+
+          // Now playing bar
+          const bar = document.getElementById('bar');
+          document.getElementById('bar-icon').textContent = sound.emoji;
+          document.getElementById('bar-name').textContent = sound.name;
+          bar.classList.add('show');
+          clearTimeout(bar._t);
+          bar._t = setTimeout(() => bar.classList.remove('show'), (audio.duration || 2) * 1000 + 2000);
+        }).catch(() => markError(card));
+      }, { once: true });
+
+      audio.addEventListener('error', () => markError(card));
+      audio.load();
     }
 
+    function markError(card) {
+      card.classList.add('error');
+      errorCount++;
+      if (errorCount > 0) document.getElementById('notice').classList.add('show');
+    }
+
+    /* ── Stop all ── */
     function stopAll() {
-      if (AC) { try { AC.close(); } catch (e) {} AC = null; }
-      document.querySelectorAll('.snd.playing').forEach(b => b.classList.remove('playing'));
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+      document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing'));
       document.getElementById('bar').classList.remove('show');
     }
 
-    /* ─────────────────────────────────────────────
-       UI
-       ───────────────────────────────────────────── */
-
-    let activeCat = 'all';
-
-    // Build category buttons
-    const catsEl = document.getElementById('cats');
-    cats.forEach(c => {
-      const b = document.createElement('button');
-      b.className = 'cat-btn' + (c === 'all' ? ' active' : '');
-      b.textContent = catLabels[c];
-      b.onclick = () => {
-        activeCat = c;
-        document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active'));
-        b.classList.add('active');
-        render();
-      };
-      catsEl.appendChild(b);
-    });
-
+    /* ── Render grid ── */
     function render() {
-      const q = document.getElementById('q').value.toLowerCase();
-      let list = sounds.filter(s =>
-        (activeCat === 'all' || s.c === activeCat) &&
-        (!q || s.n.toLowerCase().includes(q))
+      const q = document.getElementById('q').value.toLowerCase().trim();
+      const list = SOUNDS.filter(s =>
+        (activeCat === 'all' || s.cat === activeCat) &&
+        (!q || s.name.toLowerCase().includes(q))
       );
 
       const grid = document.getElementById('grid');
       grid.innerHTML = '';
+      errorCount = 0;
+      document.getElementById('notice').classList.remove('show');
 
       if (!list.length) {
-        grid.innerHTML = '<p class="empty">Aucun son trouvé 🔍</p>';
+        grid.innerHTML = '<div class="empty">Aucun son trouvé 🔍</div>';
         return;
       }
 
-      list.forEach(s => {
-        const div = document.createElement('div');
-        div.className = 'snd';
-        div.style.setProperty('--dur', s.dur + 's');
+      list.forEach(sound => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        const st = CAT_STYLE[sound.cat] || { bg: '#f0f0f0', color: '#666' };
 
-        const col = catColors[s.c] || { text: '#666', bg: '#f0f0f0' };
-        div.innerHTML = `
-          <span class="icon">${s.e}</span>
-          <span class="label">${s.n}</span><br>
-          <span class="tag" style="background:${col.bg};color:${col.text}">${catLabels[s.c]}</span>
-          <div class="bar"></div>
+        card.innerHTML = `
+          <span class="emoji">${sound.emoji}</span>
+          <span class="name">${sound.name}</span><br>
+          <span class="badge" style="background:${st.bg};color:${st.color}">${CAT_LABELS[sound.cat]}</span>
+          <div class="prog"></div>
         `;
 
-        div.onclick = e => {
-          // Ripple effect
+        card.onclick = e => {
+          if (card.classList.contains('error')) return;
+
+          // Ripple
           const r = document.createElement('div');
           r.className = 'ripple';
-          const rect = div.getBoundingClientRect();
-          const size = Math.max(div.offsetWidth, div.offsetHeight) * 2;
-          r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px`;
-          div.appendChild(r);
+          const rect = card.getBoundingClientRect();
+          const size = Math.max(card.offsetWidth, card.offsetHeight) * 2;
+          r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+          card.appendChild(r);
           setTimeout(() => r.remove(), 500);
 
-          // Stop previous audio context
-          if (AC) { try { AC.close(); } catch (ex) {} AC = null; }
-          document.querySelectorAll('.snd.playing').forEach(b => b.classList.remove('playing'));
-
-          // Play
-          div.classList.add('playing');
-          setTimeout(() => div.classList.remove('playing'), (s.dur + 0.2) * 1000);
-          try { s.fn(); } catch (ex) { console.error(ex); }
-
-          // Now playing bar
-          const bar = document.getElementById('bar');
-          document.getElementById('bar-icon').textContent = s.e;
-          document.getElementById('bar-name').textContent = s.n + ' — MAX VOL 🔊';
-          bar.classList.add('show');
-          clearTimeout(bar._t);
-          bar._t = setTimeout(() => bar.classList.remove('show'), (s.dur + 2) * 1000);
+          play(sound, card);
         };
 
-        grid.appendChild(div);
+        grid.appendChild(card);
       });
     }
+
+    /* ── Keyboard shortcuts ── */
+    document.addEventListener('keydown', e => {
+      if (e.target.tagName === 'INPUT') return;
+      if (e.code === 'Space' || e.key === ' ') { e.preventDefault(); stopAll(); }
+    });
 
     render();
   </script>
